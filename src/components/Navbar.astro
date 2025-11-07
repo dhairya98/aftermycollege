@@ -1,0 +1,13 @@
+---
+import Header from "../components/Header.react.jsx";
+
+export const menuItems = [
+	{ label: "Probability", href: "/notes/probability" },
+	{ label: "Random Variables", href: "/notes/random-variables" },
+	{ label: "Photo Editing", href: "/notes/photo-editing" },
+	{ label: "Sample: pdf", href: "/notes/sample-math-usecase" },
+];
+const siteTitle = "After My College";
+---
+
+<Header client:load siteTitle={siteTitle} menuItems={menuItems as any} />

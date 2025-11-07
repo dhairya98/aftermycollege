@@ -1,0 +1,66 @@
+---
+import "../styles/global.css";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>aftermycollege</title>
+
+		<!-- Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				font-family:
+					"Poppins",
+					system-ui,
+					-apple-system,
+					"Segoe UI",
+					Roboto,
+					"Helvetica Neue",
+					Arial;
+			}
+		</style>
+
+		<script is:inline>
+			window.MathJax = {
+				tex: {
+					inlineMath: [
+						["\\(", "\\)"],
+						["$", "$"],
+					],
+					displayMath: [
+						["\\[", "\\]"],
+						["$$", "$$"],
+					],
+					processEscapes: true,
+				},
+				svg: { fontCache: "global" },
+			};
+		</script>
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+		></script>
+	</head>
+
+	<body class="antialiased" data-theme="light">
+		<div class="min-h-screen flex flex-col">
+			<Navbar />
+			<main>
+				<!--this is where mdxrenders -->
+				<slot />
+			</main>
+			<Footer />
+		</div>
+	</body>
+</html>

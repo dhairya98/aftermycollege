@@ -1,0 +1,46 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CourseLayout from "../../layouts/CourseLayout.astro";
+
+export async function getStaticPaths() {
+	const lessons = import.meta.glob("/src/content/lessons/*.mdx");
+	return Object.keys(lessons).map((path) => {
+		const slug = path
+			.split("/")
+			.pop()
+			.replace(/\.mdx$/, "");
+		return { params: { slug } };
+	});
+}
+
+const { slug } = Astro.params;
+
+const lessons = import.meta.glob("/src/content/lessons/*.mdx");
+
+const key = `/src/content/lessons/${slug}.mdx`;
+let Lesson = null;
+let frontmatter = {};
+
+if (lessons[key]) {
+	const mod = await lessons[key]();
+	Lesson = mod.default;
+	frontmatter = mod.frontmatter ?? {};
+}
+
+const title =
+	frontmatter.title ??
+	slug
+		.split("-")
+		.map((w) => w[0].toUpperCase() + w.slice(1))
+		.join(" ");
+const description = frontmatter.description ?? "Lesson coming soon.";
+const heroImage = frontmatter.image ?? "https://placehold.co/600x350";
+---
+
+<Layout>
+	<CourseLayout title={title} description={description} image={heroImage}>
+		<article class="prose prose-slate max-w-none">
+			{Lesson ? <Lesson /> : <p>We’re preparing this lesson.</p>}
+		</article>
+	</CourseLayout>
+</Layout>

@@ -104,7 +104,7 @@ export default function Header({ siteTitle = "", menuItems = [] }) {
 						className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 logo-center "
 					>
 						<img
-							src="/src/assets/after_my_college.png"
+							src="/public/assets/after_my_college.png"
 							alt={siteTitle}
 							style={{ height: 40 }}
 						/>

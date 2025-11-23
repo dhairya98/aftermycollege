@@ -3,6 +3,7 @@ import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import mdx from "@astrojs/mdx";
 import remarkMath from "remark-math";
+import rehypeMathjax from "rehype-mathjax";
 
 export default defineConfig({
 	integrations: [
@@ -10,6 +11,7 @@ export default defineConfig({
 		tailwind(),
 		mdx({
 			remarkPlugins: [remarkMath],
+			rehypePlugins: [rehypeMathjax],
 		}),
 	],
 });

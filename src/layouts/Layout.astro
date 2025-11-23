@@ -8,7 +8,7 @@ import Footer from "../components/Footer.astro";
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>aftermycollege</title>
 
 		<!-- Fonts -->
@@ -18,6 +18,7 @@ import Footer from "../components/Footer.astro";
 			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap"
 			rel="stylesheet"
 		/>
+
 		<style>
 			:root {
 				font-family:
@@ -29,35 +30,55 @@ import Footer from "../components/Footer.astro";
 					"Helvetica Neue",
 					Arial;
 			}
+			.math-display {
+				display: flex;
+				justify-content: center;
+				margin: 1rem 0;
+			}
 		</style>
 
+		<!-- ✅ MathJax Configuration -->
 		<script is:inline>
 			window.MathJax = {
 				tex: {
 					inlineMath: [
-						["\\(", "\\)"],
-						["$", "$"],
+						["\\(", "\\)"], // like \( \Omega \)
+						["$", "$"], // like $a^2 + b^2 = c^2$
 					],
 					displayMath: [
-						["\\[", "\\]"],
-						["$$", "$$"],
+						["\\[", "\\]"], // for \[ ... \]
+						["$$", "$$"], // for $$ ... $$
 					],
 					processEscapes: true,
+				},
+				options: {
+					skipHtmlTags: [
+						"script",
+						"noscript",
+						"style",
+						"textarea",
+						"pre",
+						"code",
+					],
+				},
+				startup: {
+					typeset: true,
 				},
 				svg: { fontCache: "global" },
 			};
 		</script>
+
+		<!-- ✅ Load MathJax -->
 		<script
 			defer
-			src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+			src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
 		></script>
 	</head>
 
 	<body class="antialiased" data-theme="light">
 		<div class="min-h-screen flex flex-col">
 			<Navbar />
-			<main>
-				<!--this is where mdxrenders -->
+			<main class="flex-1">
 				<slot />
 			</main>
 			<Footer />

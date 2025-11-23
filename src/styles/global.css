@@ -1,0 +1,14 @@
+mjx-container:not([display="true"]) {
+	display: inline-flex !important;
+	vertical-align: -0.15em;
+	margin: 0 2px;
+}
+
+mjx-container[display="true"] {
+	display: flex !important;
+	justify-content: center;
+}
+
+mjx-math {
+	line-height: normal !important;
+}

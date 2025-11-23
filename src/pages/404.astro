@@ -1,0 +1,52 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+	<section
+		class="min-h-[calc(100vh-180px)] bg-slate-50 flex items-center justify-center px-4 py-12"
+	>
+		<div class="max-w-3xl w-full">
+			<div
+				class="bg-white rounded-3xl shadow-xl border border-slate-100 px-6 py-10 sm:px-10 sm:py-12 flex flex-col items-center gap-8"
+			>
+				<img
+					src="/src/assets/coming-soon.jpg"
+					alt="Great things take time"
+					loading="lazy"
+				/>
+
+				<div class="space-y-3 text-center">
+					<p
+						class="text-xs font-semibold tracking-[0.2em] text-blue-600 uppercase"
+					>
+						Coming soon
+					</p>
+
+					<h1
+						class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900"
+					>
+						Awesome things are coming soon! 🚀
+					</h1>
+
+					<p
+						class="text-slate-600 max-w-xl mx-auto text-sm sm:text-base"
+					>
+						The page you’re looking for is either under construction
+						or doesn’t exist yet. In the meantime, feel free to
+						explore the lessons that are already live.
+					</p>
+				</div>
+
+				<div class="flex flex-col sm:flex-row gap-3 justify-center">
+					<a
+						href="/"
+						class="px-6 py-3 rounded-lg bg-blue-700 text-white font-medium shadow hover:bg-blue-800 transition"
+					>
+						Go back home
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</Layout>

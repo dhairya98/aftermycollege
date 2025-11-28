@@ -1,12 +1,19 @@
 ---
 import Header from "../components/Header.react.jsx";
+import { getCollection } from "astro:content";
 
-export const menuItems = [
-	{ label: "Probability", href: "/notes/probability" },
-	{ label: "Random Variables", href: "/notes/random-variables" },
-	{ label: "Photo Editing", href: "/notes/photo-editing" },
-	{ label: "Sample: pdf", href: "/notes/sample-math-usecase" },
-];
+// Get all courses from the courses collection
+const allCourses = await getCollection("courses");
+const courses = allCourses.sort(
+	(a, b) => (a.data.order || 999) - (b.data.order || 999),
+);
+
+// Generate menu items from courses
+const menuItems = courses.map((course) => ({
+	label: course.data.title,
+	href: `/courses/${course.id}`,
+}));
+
 const siteTitle = "After My College";
 ---
 

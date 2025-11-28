@@ -1,0 +1,172 @@
+---
+title: "Variables and Data Types"
+description: "Learn about Python variables, naming conventions, and the fundamental data types: numbers, strings, booleans, and more."
+chapterOrder: 2
+course: "python"
+---
+
+# Variables and Data Types
+
+Variables are containers for storing data values. In Python, you don't need to declare the type of a variable - Python automatically determines it based on the value you assign.
+
+## Variables
+
+### Creating Variables
+
+Variables are created when you assign a value to them:
+
+```python
+name = "Alice"
+age = 25
+height = 5.6
+is_student = True
+```
+
+### Variable Naming Rules
+
+- Must start with a letter or underscore
+- Can contain letters, numbers, and underscores
+- Case-sensitive (`name` and `Name` are different)
+- Cannot use Python keywords (like `if`, `for`, `class`)
+
+**Good examples:**
+```python
+user_name = "Alice"
+user_age = 25
+_count = 10
+```
+
+**Bad examples:**
+```python
+2name = "Alice"  # Can't start with number
+user-name = "Bob"  # Can't use hyphens
+class = "Math"     # 'class' is a keyword
+```
+
+## Data Types
+
+Python has several built-in data types:
+
+### Numbers
+
+#### Integers
+```python
+x = 10
+y = -5
+z = 0
+```
+
+#### Floats (Decimal Numbers)
+```python
+pi = 3.14159
+temperature = -10.5
+```
+
+#### Complex Numbers
+```python
+z = 3 + 4j
+```
+
+### Strings
+
+Strings are sequences of characters enclosed in quotes:
+
+```python
+name = "Alice"
+greeting = 'Hello'
+message = """This is a
+multi-line string"""
+```
+
+**String Operations:**
+```python
+first_name = "Alice"
+last_name = "Smith"
+full_name = first_name + " " + last_name  # Concatenation
+print(full_name)  # "Alice Smith"
+
+# String repetition
+print("Hi" * 3)  # "HiHiHi"
+
+# String formatting (f-strings)
+age = 25
+print(f"{first_name} is {age} years old")  # "Alice is 25 years old"
+```
+
+### Booleans
+
+Boolean values are `True` or `False`:
+
+```python
+is_active = True
+is_complete = False
+```
+
+### Type Checking
+
+Use `type()` to check a variable's type:
+
+```python
+x = 10
+print(type(x))  # <class 'int'>
+
+name = "Alice"
+print(type(name))  # <class 'str'>
+```
+
+### Type Conversion
+
+Convert between types:
+
+```python
+# String to integer
+age_str = "25"
+age = int(age_str)
+
+# Integer to string
+age = 25
+age_str = str(age)
+
+# Float to integer (truncates)
+pi = 3.14159
+pi_int = int(pi)  # 3
+```
+
+## Constants
+
+While Python doesn't have true constants, convention is to use UPPERCASE for constants:
+
+```python
+PI = 3.14159
+MAX_CONNECTIONS = 100
+```
+
+## Multiple Assignment
+
+Assign multiple variables at once:
+
+```python
+x, y, z = 1, 2, 3
+a = b = c = 0
+```
+
+## Practice Example
+
+```python
+# Student information
+student_name = "Alice"
+student_age = 20
+student_gpa = 3.8
+is_enrolled = True
+
+# Display information
+print(f"Student: {student_name}")
+print(f"Age: {student_age}")
+print(f"GPA: {student_gpa}")
+print(f"Enrolled: {is_enrolled}")
+```
+
+## Next Chapter
+
+Now that you understand variables and data types, let's learn about control flow - how to make decisions and repeat actions in your programs!
+

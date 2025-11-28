@@ -1,0 +1,245 @@
+---
+title: "Functions"
+description: "Learn to create reusable functions, work with parameters, return values, and understand scope in Python."
+chapterOrder: 4
+course: "python"
+---
+
+# Functions
+
+Functions are reusable blocks of code that perform a specific task. They help organize code, avoid repetition, and make programs easier to understand and maintain.
+
+## Defining Functions
+
+### Basic Function
+
+```python
+def greet():
+    print("Hello, World!")
+
+# Call the function
+greet()
+```
+
+### Functions with Parameters
+
+```python
+def greet(name):
+    print(f"Hello, {name}!")
+
+greet("Alice")  # "Hello, Alice!"
+greet("Bob")    # "Hello, Bob!"
+```
+
+### Functions with Multiple Parameters
+
+```python
+def add(x, y):
+    result = x + y
+    print(f"{x} + {y} = {result}")
+
+add(5, 3)  # "5 + 3 = 8"
+```
+
+### Functions with Return Values
+
+```python
+def multiply(x, y):
+    return x * y
+
+result = multiply(4, 5)
+print(result)  # 20
+```
+
+### Default Parameters
+
+Provide default values for parameters:
+
+```python
+def greet(name, greeting="Hello"):
+    print(f"{greeting}, {name}!")
+
+greet("Alice")              # "Hello, Alice!"
+greet("Bob", "Hi")          # "Hi, Bob!"
+greet("Charlie", "Goodbye") # "Goodbye, Charlie!"
+```
+
+### Keyword Arguments
+
+Pass arguments by name:
+
+```python
+def create_profile(name, age, city):
+    print(f"Name: {name}, Age: {age}, City: {city}")
+
+# Positional arguments
+create_profile("Alice", 25, "New York")
+
+# Keyword arguments (order doesn't matter)
+create_profile(city="London", name="Bob", age=30)
+```
+
+### Variable-Length Arguments
+
+#### *args (Arbitrary Arguments)
+
+Accept any number of positional arguments:
+
+```python
+def sum_all(*numbers):
+    total = 0
+    for num in numbers:
+        total += num
+    return total
+
+print(sum_all(1, 2, 3))        # 6
+print(sum_all(1, 2, 3, 4, 5)) # 15
+```
+
+#### **kwargs (Keyword Arguments)
+
+Accept any number of keyword arguments:
+
+```python
+def print_info(**kwargs):
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+print_info(name="Alice", age=25, city="NYC")
+# name: Alice
+# age: 25
+# city: NYC
+```
+
+## Lambda Functions
+
+Small anonymous functions defined with `lambda`:
+
+```python
+# Regular function
+def square(x):
+    return x ** 2
+
+# Lambda equivalent
+square = lambda x: x ** 2
+
+print(square(5))  # 25
+
+# Lambda with multiple parameters
+add = lambda x, y: x + y
+print(add(3, 4))  # 7
+
+# Common use: sorting
+students = [("Alice", 20), ("Bob", 19), ("Charlie", 21)]
+students.sort(key=lambda student: student[1])  # Sort by age
+```
+
+## Scope
+
+### Local vs Global Scope
+
+```python
+x = 10  # Global variable
+
+def my_function():
+    y = 5  # Local variable
+    print(f"Local y: {y}")
+    print(f"Global x: {x}")
+
+my_function()
+# print(y)  # Error! y is not defined outside the function
+```
+
+### Modifying Global Variables
+
+```python
+count = 0
+
+def increment():
+    global count
+    count += 1
+
+increment()
+print(count)  # 1
+```
+
+## Docstrings
+
+Document your functions:
+
+```python
+def calculate_area(length, width):
+    """
+    Calculate the area of a rectangle.
+    
+    Parameters:
+    length (float): The length of the rectangle
+    width (float): The width of the rectangle
+    
+    Returns:
+    float: The area of the rectangle
+    """
+    return length * width
+
+# Access the docstring
+print(calculate_area.__doc__)
+```
+
+## Practice Examples
+
+### Example 1: Temperature Converter
+
+```python
+def celsius_to_fahrenheit(celsius):
+    """Convert Celsius to Fahrenheit."""
+    return (celsius * 9/5) + 32
+
+def fahrenheit_to_celsius(fahrenheit):
+    """Convert Fahrenheit to Celsius."""
+    return (fahrenheit - 32) * 5/9
+
+temp_c = 25
+temp_f = celsius_to_fahrenheit(temp_c)
+print(f"{temp_c}°C = {temp_f}°F")
+```
+
+### Example 2: Factorial Function
+
+```python
+def factorial(n):
+    """Calculate factorial of n."""
+    if n <= 1:
+        return 1
+    return n * factorial(n - 1)
+
+print(factorial(5))  # 120
+```
+
+### Example 3: Find Maximum
+
+```python
+def find_max(*numbers):
+    """Find the maximum value from given numbers."""
+    if not numbers:
+        return None
+    max_val = numbers[0]
+    for num in numbers:
+        if num > max_val:
+            max_val = num
+    return max_val
+
+print(find_max(3, 7, 2, 9, 1))  # 9
+```
+
+## Best Practices
+
+1. **Use descriptive function names**
+2. **Keep functions small and focused**
+3. **Use docstrings to document**
+4. **Avoid modifying global variables**
+5. **Return values instead of printing (when appropriate)**
+
+## Next Chapter
+
+Now that you understand functions, let's explore Python's powerful data structures: lists, dictionaries, tuples, and sets!
+

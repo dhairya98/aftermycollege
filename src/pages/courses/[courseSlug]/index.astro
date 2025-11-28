@@ -1,0 +1,169 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import CourseLayout from "../../../layouts/CourseLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+    const allCourses = await getCollection("courses");
+
+    return allCourses.map((course) => ({
+        params: { courseSlug: course.id },
+        props: { course },
+    }));
+}
+
+const { course } = Astro.props;
+const { courseSlug } = Astro.params;
+
+// Get all chapters for this course and sort by chapterOrder
+const allChapters = await getCollection("chapters");
+const courseChapters = allChapters
+    .filter((item) => item.data.course === courseSlug)
+    .sort((a, b) => (a.data.chapterOrder || 0) - (b.data.chapterOrder || 0));
+
+console.log(allChapters);
+// Render course content (Astro 5.x uses render() from astro:content)
+const { Content } = await render(course);
+
+// Helper to get chapter slug from id (id is like "calculus/chapter-1-limits")
+const getChapterSlug = (id: string) => id.split("/").pop() || id;
+---
+
+<Layout>
+    <CourseLayout
+        title={course.data.title}
+        description={course.data.description}
+        image={course.data.image}
+        courseSlug={courseSlug}
+    >
+        <!-- Course Introduction -->
+        <div class="prose prose-slate max-w-none mb-12">
+            <Content />
+        </div>
+
+        <!-- Chapters Section -->
+        {
+            courseChapters.length > 0 && (
+                <div class="mt-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                        <svg
+                            class="w-6 h-6 text-blue-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                            />
+                        </svg>
+                        Course Chapters
+                    </h2>
+                    <div class="space-y-4">
+                        {courseChapters.map((chapter, index) => (
+                            <a
+                                href={`/courses/${courseSlug}/${getChapterSlug(chapter.id)}`}
+                                class="group flex items-start gap-4 p-5 bg-white rounded-xl border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all duration-200"
+                            >
+                                <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-blue-50 text-blue-700 font-bold text-lg group-hover:bg-blue-100 transition-colors">
+                                    {chapter.data.chapterOrder}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
+                                        {chapter.data.title}
+                                    </h3>
+                                    {chapter.data.description && (
+                                        <p class="mt-1 text-gray-600 text-sm line-clamp-2">
+                                            {chapter.data.description}
+                                        </p>
+                                    )}
+                                </div>
+                                <div class="flex-shrink-0 self-center">
+                                    <svg
+                                        class="w-5 h-5 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M9 5l7 7-7 7"
+                                        />
+                                    </svg>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
+
+                    {/* Quick Start CTA */}
+                    {courseChapters.length > 0 && (
+                        <div class="mt-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+                            <div class="flex items-center justify-between flex-wrap gap-4">
+                                <div>
+                                    <h3 class="font-semibold text-gray-900">
+                                        Ready to start learning?
+                                    </h3>
+                                    <p class="text-gray-600 text-sm mt-1">
+                                        Begin with Chapter 1 and work your way
+                                        through.
+                                    </p>
+                                </div>
+                                <a
+                                    href={`/courses/${courseSlug}/${getChapterSlug(courseChapters[0].id)}`}
+                                    class="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                                >
+                                    Start Chapter 1
+                                    <svg
+                                        class="ml-2 w-4 h-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                        />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )
+        }
+
+        {/* Empty State */}
+        {
+            courseChapters.length === 0 && (
+                <div class="mt-8 text-center py-12 bg-gray-50 rounded-xl border border-gray-200">
+                    <svg
+                        class="w-16 h-16 text-gray-400 mx-auto mb-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.5"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                        />
+                    </svg>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                        Chapters Coming Soon
+                    </h3>
+                    <p class="text-gray-600">
+                        We're working on adding content to this course. Check
+                        back soon!
+                    </p>
+                </div>
+            )
+        }
+    </CourseLayout>
+</Layout>

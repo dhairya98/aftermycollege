@@ -1,0 +1,293 @@
+---
+title: "Error Handling and Exceptions"
+description: "Learn to handle errors gracefully with try/except blocks, raise custom exceptions, and debug your Python programs."
+chapterOrder: 8
+course: "python"
+---
+
+# Error Handling and Exceptions
+
+Errors are inevitable in programming. Python provides powerful exception handling mechanisms to gracefully handle errors and prevent your program from crashing.
+
+## Types of Errors
+
+### Syntax Errors
+
+Errors in code structure (caught before execution):
+
+```python
+# Syntax Error
+if True
+    print("Hello")  # Missing colon
+
+# Correct
+if True:
+    print("Hello")
+```
+
+### Runtime Errors (Exceptions)
+
+Errors that occur during execution:
+
+```python
+# ZeroDivisionError
+result = 10 / 0
+
+# TypeError
+result = "hello" + 5
+
+# ValueError
+number = int("not a number")
+
+# IndexError
+items = [1, 2, 3]
+item = items[10]
+
+# KeyError
+data = {"name": "Alice"}
+value = data["age"]
+```
+
+## Try-Except Blocks
+
+### Basic Exception Handling
+
+```python
+try:
+    result = 10 / 0
+except ZeroDivisionError:
+    print("Cannot divide by zero!")
+```
+
+### Handling Multiple Exceptions
+
+```python
+try:
+    number = int(input("Enter a number: "))
+    result = 10 / number
+    print(f"Result: {result}")
+except ValueError:
+    print("Invalid input! Please enter a number.")
+except ZeroDivisionError:
+    print("Cannot divide by zero!")
+```
+
+### Catching All Exceptions
+
+```python
+try:
+    # Some code
+    result = 10 / 0
+except Exception as e:
+    print(f"An error occurred: {e}")
+```
+
+### Multiple Exception Types
+
+```python
+try:
+    # Some code
+    pass
+except (ValueError, TypeError) as e:
+    print(f"Value or type error: {e}")
+```
+
+## Else and Finally
+
+### Else Clause
+
+Executes if no exception occurs:
+
+```python
+try:
+    number = int(input("Enter a number: "))
+    result = 10 / number
+except ValueError:
+    print("Invalid input!")
+except ZeroDivisionError:
+    print("Cannot divide by zero!")
+else:
+    print(f"Success! Result: {result}")
+```
+
+### Finally Clause
+
+Always executes, regardless of exceptions:
+
+```python
+try:
+    file = open("data.txt", "r")
+    content = file.read()
+except FileNotFoundError:
+    print("File not found!")
+finally:
+    print("This always executes")
+    # Good for cleanup code
+```
+
+## Raising Exceptions
+
+### Raise Built-in Exceptions
+
+```python
+def divide(a, b):
+    if b == 0:
+        raise ZeroDivisionError("Cannot divide by zero!")
+    return a / b
+
+try:
+    result = divide(10, 0)
+except ZeroDivisionError as e:
+    print(e)  # "Cannot divide by zero!"
+```
+
+### Custom Exceptions
+
+Create your own exception classes:
+
+```python
+class InvalidAgeError(Exception):
+    """Raised when age is invalid"""
+    pass
+
+def set_age(age):
+    if age < 0:
+        raise InvalidAgeError("Age cannot be negative!")
+    if age > 150:
+        raise InvalidAgeError("Age seems unrealistic!")
+    return age
+
+try:
+    age = set_age(-5)
+except InvalidAgeError as e:
+    print(f"Error: {e}")
+```
+
+### Exception with Custom Message
+
+```python
+class InsufficientFundsError(Exception):
+    def __init__(self, balance, amount):
+        self.balance = balance
+        self.amount = amount
+        self.message = f"Insufficient funds! Balance: ${balance}, Required: ${amount}"
+        super().__init__(self.message)
+
+def withdraw(balance, amount):
+    if amount > balance:
+        raise InsufficientFundsError(balance, amount)
+    return balance - amount
+
+try:
+    result = withdraw(100, 200)
+except InsufficientFundsError as e:
+    print(e.message)
+```
+
+## Common Exception Types
+
+| Exception | Description |
+|-----------|-------------|
+| `ValueError` | Wrong value type |
+| `TypeError` | Wrong type operation |
+| `IndexError` | List index out of range |
+| `KeyError` | Dictionary key not found |
+| `FileNotFoundError` | File doesn't exist |
+| `ZeroDivisionError` | Division by zero |
+| `AttributeError` | Attribute doesn't exist |
+| `NameError` | Variable not defined |
+
+## Assertions
+
+Use assertions for debugging:
+
+```python
+def calculate_average(numbers):
+    assert len(numbers) > 0, "List cannot be empty"
+    return sum(numbers) / len(numbers)
+
+# This will raise AssertionError if condition is False
+average = calculate_average([])
+```
+
+**Note:** Assertions can be disabled with `-O` flag, so don't use them for input validation.
+
+## Practice Examples
+
+### Example 1: Safe Division
+
+```python
+def safe_divide(a, b):
+    try:
+        result = a / b
+        return result
+    except ZeroDivisionError:
+        return None
+    except TypeError:
+        return "Invalid input types"
+
+print(safe_divide(10, 2))   # 5.0
+print(safe_divide(10, 0))   # None
+print(safe_divide(10, "2")) # "Invalid input types"
+```
+
+### Example 2: File Reader with Error Handling
+
+```python
+def read_file_safely(filename):
+    try:
+        with open(filename, "r") as file:
+            return file.read()
+    except FileNotFoundError:
+        return f"Error: File '{filename}' not found"
+    except PermissionError:
+        return f"Error: Permission denied for '{filename}'"
+    except Exception as e:
+        return f"Error: {e}"
+
+content = read_file_safely("data.txt")
+print(content)
+```
+
+### Example 3: Input Validation
+
+```python
+def get_positive_number():
+    while True:
+        try:
+            number = float(input("Enter a positive number: "))
+            if number <= 0:
+                raise ValueError("Number must be positive")
+            return number
+        except ValueError as e:
+            print(f"Invalid input: {e}. Please try again.")
+
+number = get_positive_number()
+print(f"You entered: {number}")
+```
+
+## Best Practices
+
+1. **Be specific** - Catch specific exceptions, not all
+2. **Don't ignore exceptions** - At least log them
+3. **Use finally** for cleanup (closing files, connections)
+4. **Create custom exceptions** for your domain
+5. **Provide helpful error messages**
+
+## Debugging Tips
+
+```python
+import traceback
+
+try:
+    # Some code that might fail
+    result = 10 / 0
+except Exception as e:
+    print("Error occurred:")
+    traceback.print_exc()  # Print full traceback
+```
+
+## Next Chapter
+
+Now let's explore modules and packages - how to organize your code and use code written by others!
+

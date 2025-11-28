@@ -1,0 +1,235 @@
+---
+title: "Control Flow"
+description: "Master conditionals (if/else) and loops (for/while) to control the execution flow of your Python programs."
+chapterOrder: 3
+course: "python"
+---
+
+# Control Flow
+
+Control flow statements allow you to make decisions and repeat actions in your programs. Python provides `if/else` for conditionals and `for/while` for loops.
+
+## Conditional Statements
+
+### If Statement
+
+Execute code only if a condition is true:
+
+```python
+age = 18
+
+if age >= 18:
+    print("You are an adult")
+```
+
+### If-Else Statement
+
+Execute one block if true, another if false:
+
+```python
+age = 16
+
+if age >= 18:
+    print("You are an adult")
+else:
+    print("You are a minor")
+```
+
+### If-Elif-Else Statement
+
+Handle multiple conditions:
+
+```python
+score = 85
+
+if score >= 90:
+    grade = "A"
+elif score >= 80:
+    grade = "B"
+elif score >= 70:
+    grade = "C"
+else:
+    grade = "F"
+
+print(f"Your grade is {grade}")
+```
+
+### Comparison Operators
+
+```python
+x = 10
+y = 5
+
+x == y  # False (equal to)
+x != y  # True (not equal to)
+x > y   # True (greater than)
+x < y   # False (less than)
+x >= y  # True (greater than or equal)
+x <= y  # False (less than or equal)
+```
+
+### Logical Operators
+
+```python
+age = 25
+has_license = True
+
+# AND - both must be true
+if age >= 18 and has_license:
+    print("You can drive")
+
+# OR - at least one must be true
+if age < 18 or not has_license:
+    print("You cannot drive")
+
+# NOT - reverses the boolean
+if not has_license:
+    print("You need a license")
+```
+
+## Loops
+
+### For Loop
+
+Iterate over a sequence (list, string, range, etc.):
+
+```python
+# Iterate over a list
+fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    print(fruit)
+
+# Iterate over a string
+for char in "Python":
+    print(char)
+
+# Iterate over a range
+for i in range(5):
+    print(i)  # Prints 0, 1, 2, 3, 4
+
+# Range with start and end
+for i in range(1, 6):
+    print(i)  # Prints 1, 2, 3, 4, 5
+
+# Range with step
+for i in range(0, 10, 2):
+    print(i)  # Prints 0, 2, 4, 6, 8
+```
+
+### While Loop
+
+Execute code while a condition is true:
+
+```python
+count = 0
+while count < 5:
+    print(f"Count: {count}")
+    count += 1
+```
+
+**Be careful with infinite loops!**
+
+```python
+# This would run forever (don't run this!)
+# while True:
+#     print("Infinite loop")
+```
+
+### Loop Control Statements
+
+#### Break
+
+Exit the loop immediately:
+
+```python
+for i in range(10):
+    if i == 5:
+        break
+    print(i)  # Prints 0, 1, 2, 3, 4
+```
+
+#### Continue
+
+Skip the rest of the current iteration:
+
+```python
+for i in range(10):
+    if i % 2 == 0:
+        continue  # Skip even numbers
+    print(i)  # Prints 1, 3, 5, 7, 9
+```
+
+#### Else with Loops
+
+Execute code when loop completes normally (not via break):
+
+```python
+for i in range(5):
+    print(i)
+else:
+    print("Loop completed normally")
+```
+
+## Nested Loops
+
+Loops can be nested inside other loops:
+
+```python
+# Multiplication table
+for i in range(1, 4):
+    for j in range(1, 4):
+        print(f"{i} x {j} = {i * j}")
+    print()  # Empty line between tables
+```
+
+## Practice Examples
+
+### Example 1: Number Guessing Game
+
+```python
+secret_number = 7
+guess = int(input("Guess a number between 1 and 10: "))
+
+if guess == secret_number:
+    print("Congratulations! You guessed it!")
+elif guess < secret_number:
+    print("Too low!")
+else:
+    print("Too high!")
+```
+
+### Example 2: Sum of Even Numbers
+
+```python
+total = 0
+for i in range(1, 11):
+    if i % 2 == 0:
+        total += i
+
+print(f"Sum of even numbers from 1 to 10: {total}")
+```
+
+### Example 3: Finding Prime Numbers
+
+```python
+number = 17
+is_prime = True
+
+if number < 2:
+    is_prime = False
+else:
+    for i in range(2, number):
+        if number % i == 0:
+            is_prime = False
+            break
+
+if is_prime:
+    print(f"{number} is prime")
+else:
+    print(f"{number} is not prime")
+```
+
+## Next Chapter
+
+Now that you can control program flow, let's learn about functions - reusable blocks of code that make your programs more organized and efficient!
+

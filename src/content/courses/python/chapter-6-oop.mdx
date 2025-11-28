@@ -1,0 +1,257 @@
+---
+title: "Object-Oriented Programming"
+description: "Learn to create classes, objects, inheritance, and polymorphism. Master OOP principles in Python."
+chapterOrder: 6
+course: "python"
+---
+
+# Object-Oriented Programming
+
+Object-Oriented Programming (OOP) is a programming paradigm that organizes code into objects - instances of classes that contain both data (attributes) and behavior (methods).
+
+## Classes and Objects
+
+### Creating a Class
+
+```python
+class Dog:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    
+    def bark(self):
+        return f"{self.name} says Woof!"
+    
+    def get_info(self):
+        return f"{self.name} is {self.age} years old"
+
+# Create objects (instances)
+dog1 = Dog("Buddy", 3)
+dog2 = Dog("Max", 5)
+
+print(dog1.bark())      # "Buddy says Woof!"
+print(dog2.get_info())  # "Max is 5 years old"
+```
+
+### The `__init__` Method
+
+The `__init__` method is called when an object is created:
+
+```python
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+        print(f"{name} created!")
+
+person = Person("Alice", 25)  # "Alice created!"
+```
+
+## Attributes and Methods
+
+### Instance Attributes
+
+Attributes specific to each object:
+
+```python
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+        self.pi = 3.14159
+    
+    def area(self):
+        return self.pi * self.radius ** 2
+
+circle1 = Circle(5)
+circle2 = Circle(10)
+
+print(circle1.area())  # 78.54
+print(circle2.area())  # 314.159
+```
+
+### Class Attributes
+
+Attributes shared by all instances:
+
+```python
+class Dog:
+    species = "Canis familiaris"  # Class attribute
+    
+    def __init__(self, name):
+        self.name = name  # Instance attribute
+
+dog1 = Dog("Buddy")
+dog2 = Dog("Max")
+
+print(dog1.species)  # "Canis familiaris"
+print(dog2.species)  # "Canis familiaris"
+```
+
+## Encapsulation
+
+Control access to attributes using private attributes (convention: prefix with `_`):
+
+```python
+class BankAccount:
+    def __init__(self, balance):
+        self._balance = balance  # Protected (convention)
+    
+    def deposit(self, amount):
+        if amount > 0:
+            self._balance += amount
+    
+    def get_balance(self):
+        return self._balance
+
+account = BankAccount(1000)
+account.deposit(500)
+print(account.get_balance())  # 1500
+```
+
+## Inheritance
+
+Create new classes based on existing ones:
+
+```python
+class Animal:
+    def __init__(self, name):
+        self.name = name
+    
+    def speak(self):
+        return f"{self.name} makes a sound"
+
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name} says Woof!"
+
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name} says Meow!"
+
+dog = Dog("Buddy")
+cat = Cat("Whiskers")
+
+print(dog.speak())  # "Buddy says Woof!"
+print(cat.speak())  # "Whiskers says Meow!"
+```
+
+### The `super()` Function
+
+Call parent class methods:
+
+```python
+class Animal:
+    def __init__(self, name):
+        self.name = name
+
+class Dog(Animal):
+    def __init__(self, name, breed):
+        super().__init__(name)  # Call parent __init__
+        self.breed = breed
+
+dog = Dog("Buddy", "Golden Retriever")
+print(dog.name)   # "Buddy"
+print(dog.breed)  # "Golden Retriever"
+```
+
+## Polymorphism
+
+Different classes can have methods with the same name:
+
+```python
+class Shape:
+    def area(self):
+        pass
+
+class Rectangle(Shape):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+    
+    def area(self):
+        return self.width * self.height
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+    
+    def area(self):
+        return 3.14159 * self.radius ** 2
+
+shapes = [Rectangle(5, 4), Circle(3)]
+
+for shape in shapes:
+    print(f"Area: {shape.area()}")
+```
+
+## Special Methods (Magic Methods)
+
+Special methods that define how objects behave:
+
+```python
+class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+    
+    def __str__(self):
+        return f"{self.title} by {self.author}"
+    
+    def __repr__(self):
+        return f"Book('{self.title}', '{self.author}')"
+    
+    def __eq__(self, other):
+        return self.title == other.title and self.author == other.author
+
+book1 = Book("1984", "George Orwell")
+book2 = Book("1984", "George Orwell")
+
+print(book1)        # "1984 by George Orwell"
+print(book1 == book2)  # True
+```
+
+## Practice Example: Library System
+
+```python
+class Book:
+    def __init__(self, title, author, isbn):
+        self.title = title
+        self.author = author
+        self.isbn = isbn
+        self.is_available = True
+    
+    def __str__(self):
+        return f"{self.title} by {self.author}"
+
+class Library:
+    def __init__(self):
+        self.books = []
+    
+    def add_book(self, book):
+        self.books.append(book)
+    
+    def find_book(self, title):
+        for book in self.books:
+            if book.title == title and book.is_available:
+                return book
+        return None
+    
+    def borrow_book(self, title):
+        book = self.find_book(title)
+        if book:
+            book.is_available = False
+            return f"Borrowed: {book}"
+        return "Book not available"
+
+# Usage
+library = Library()
+library.add_book(Book("1984", "George Orwell", "12345"))
+library.add_book(Book("Python Guide", "Author", "67890"))
+
+print(library.borrow_book("1984"))
+```
+
+## Next Chapter
+
+Now that you understand OOP, let's learn how to work with files - reading and writing data to files on your computer!
+

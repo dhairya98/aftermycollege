@@ -1,0 +1,253 @@
+---
+title: "File Handling"
+description: "Learn to read from and write to files. Work with text files, CSV files, and handle file operations safely."
+chapterOrder: 7
+course: "python"
+---
+
+# File Handling
+
+Python makes it easy to work with files. You can read data from files, write data to files, and manipulate file contents.
+
+## Opening Files
+
+### Basic File Operations
+
+```python
+# Open file for reading
+file = open("example.txt", "r")
+content = file.read()
+file.close()
+```
+
+### Using `with` Statement (Recommended)
+
+Automatically closes the file:
+
+```python
+with open("example.txt", "r") as file:
+    content = file.read()
+# File is automatically closed here
+```
+
+## File Modes
+
+| Mode | Description |
+|------|-------------|
+| `r` | Read (default) |
+| `w` | Write (overwrites existing) |
+| `a` | Append (adds to end) |
+| `x` | Create (fails if exists) |
+| `b` | Binary mode |
+| `t` | Text mode (default) |
+| `+` | Read and write |
+
+## Reading Files
+
+### Read Entire File
+
+```python
+with open("example.txt", "r") as file:
+    content = file.read()
+    print(content)
+```
+
+### Read Line by Line
+
+```python
+with open("example.txt", "r") as file:
+    for line in file:
+        print(line.strip())  # strip() removes newline
+```
+
+### Read All Lines into List
+
+```python
+with open("example.txt", "r") as file:
+    lines = file.readlines()
+    for line in lines:
+        print(line.strip())
+```
+
+### Read First N Characters
+
+```python
+with open("example.txt", "r") as file:
+    first_100 = file.read(100)
+    print(first_100)
+```
+
+## Writing Files
+
+### Write to File
+
+```python
+with open("output.txt", "w") as file:
+    file.write("Hello, World!\n")
+    file.write("This is a new line.")
+```
+
+### Append to File
+
+```python
+with open("output.txt", "a") as file:
+    file.write("\nThis line is appended.")
+```
+
+### Write Multiple Lines
+
+```python
+lines = ["Line 1\n", "Line 2\n", "Line 3\n"]
+
+with open("output.txt", "w") as file:
+    file.writelines(lines)
+```
+
+## Working with CSV Files
+
+### Reading CSV
+
+```python
+import csv
+
+with open("data.csv", "r") as file:
+    reader = csv.reader(file)
+    for row in reader:
+        print(row)  # Each row is a list
+```
+
+### Reading CSV as Dictionary
+
+```python
+import csv
+
+with open("data.csv", "r") as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+        print(row["name"], row["age"])  # Access by column name
+```
+
+### Writing CSV
+
+```python
+import csv
+
+data = [
+    ["Name", "Age", "City"],
+    ["Alice", "25", "NYC"],
+    ["Bob", "30", "LA"]
+]
+
+with open("output.csv", "w", newline="") as file:
+    writer = csv.writer(file)
+    writer.writerows(data)
+```
+
+## File Paths
+
+### Absolute vs Relative Paths
+
+```python
+# Relative path (from current directory)
+with open("data/file.txt", "r") as file:
+    pass
+
+# Absolute path
+with open("/Users/username/data/file.txt", "r") as file:
+    pass
+```
+
+### Using `os.path`
+
+```python
+import os
+
+# Join paths (works on any OS)
+path = os.path.join("folder", "subfolder", "file.txt")
+
+# Get current directory
+current_dir = os.getcwd()
+
+# Check if file exists
+if os.path.exists("file.txt"):
+    print("File exists!")
+```
+
+## Error Handling with Files
+
+```python
+try:
+    with open("nonexistent.txt", "r") as file:
+        content = file.read()
+except FileNotFoundError:
+    print("File not found!")
+except PermissionError:
+    print("Permission denied!")
+except Exception as e:
+    print(f"An error occurred: {e}")
+```
+
+## Practice Examples
+
+### Example 1: File Copy
+
+```python
+def copy_file(source, destination):
+    try:
+        with open(source, "r") as src:
+            content = src.read()
+        
+        with open(destination, "w") as dst:
+            dst.write(content)
+        
+        print(f"Copied {source} to {destination}")
+    except FileNotFoundError:
+        print(f"File {source} not found!")
+
+copy_file("source.txt", "copy.txt")
+```
+
+### Example 2: Word Counter
+
+```python
+def count_words(filename):
+    try:
+        with open(filename, "r") as file:
+            content = file.read()
+            words = content.split()
+            return len(words)
+    except FileNotFoundError:
+        return 0
+
+word_count = count_words("text.txt")
+print(f"Total words: {word_count}")
+```
+
+### Example 3: Log File Analyzer
+
+```python
+def analyze_log(logfile):
+    errors = []
+    with open(logfile, "r") as file:
+        for line_num, line in enumerate(file, 1):
+            if "ERROR" in line:
+                errors.append((line_num, line.strip()))
+    return errors
+
+errors = analyze_log("app.log")
+for line_num, error in errors:
+    print(f"Line {line_num}: {error}")
+```
+
+## Best Practices
+
+1. **Always use `with` statement** for automatic file closing
+2. **Handle exceptions** when working with files
+3. **Use appropriate file modes** (`r`, `w`, `a`)
+4. **Close files explicitly** if not using `with`
+5. **Check file existence** before operations when needed
+
+## Next Chapter
+
+Now let's learn about error handling and exceptions - how to gracefully handle errors in your programs!
+

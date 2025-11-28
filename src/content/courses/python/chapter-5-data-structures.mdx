@@ -1,0 +1,266 @@
+---
+title: "Data Structures"
+description: "Master Python's built-in data structures: lists, dictionaries, tuples, and sets. Learn when and how to use each one."
+chapterOrder: 5
+course: "python"
+---
+
+# Data Structures
+
+Python provides several built-in data structures to organize and store data efficiently. Each has its own characteristics and use cases.
+
+## Lists
+
+Lists are ordered, mutable collections of items.
+
+### Creating Lists
+
+```python
+fruits = ["apple", "banana", "cherry"]
+numbers = [1, 2, 3, 4, 5]
+mixed = [1, "hello", 3.14, True]
+empty = []
+```
+
+### Accessing Elements
+
+```python
+fruits = ["apple", "banana", "cherry"]
+print(fruits[0])   # "apple" (first element)
+print(fruits[-1])  # "cherry" (last element)
+print(fruits[1:3]) # ["banana", "cherry"] (slicing)
+```
+
+### Modifying Lists
+
+```python
+fruits = ["apple", "banana"]
+fruits.append("cherry")        # Add to end
+fruits.insert(1, "orange")     # Insert at index
+fruits[0] = "grape"             # Modify element
+fruits.remove("banana")          # Remove by value
+fruits.pop()                     # Remove last element
+fruits.pop(0)                    # Remove by index
+```
+
+### List Methods
+
+```python
+numbers = [3, 1, 4, 1, 5]
+
+numbers.sort()              # Sort in place
+numbers.reverse()           # Reverse in place
+count = numbers.count(1)   # Count occurrences
+index = numbers.index(4)   # Find index
+length = len(numbers)      # Get length
+```
+
+### List Comprehensions
+
+Create lists concisely:
+
+```python
+# Traditional way
+squares = []
+for x in range(5):
+    squares.append(x ** 2)
+
+# List comprehension
+squares = [x ** 2 for x in range(5)]
+
+# With condition
+evens = [x for x in range(10) if x % 2 == 0]
+```
+
+## Dictionaries
+
+Dictionaries store key-value pairs. They're unordered (Python 3.7+ maintains insertion order).
+
+### Creating Dictionaries
+
+```python
+student = {
+    "name": "Alice",
+    "age": 20,
+    "grade": "A"
+}
+
+# Empty dictionary
+empty = {}
+empty = dict()
+```
+
+### Accessing Values
+
+```python
+student = {"name": "Alice", "age": 20}
+
+print(student["name"])           # "Alice"
+print(student.get("age"))        # 20
+print(student.get("city", "N/A")) # "N/A" (default if key doesn't exist)
+```
+
+### Modifying Dictionaries
+
+```python
+student = {"name": "Alice"}
+
+student["age"] = 20              # Add/update
+student.update({"city": "NYC"})   # Update multiple
+del student["age"]                # Delete key
+value = student.pop("city")       # Remove and return value
+```
+
+### Dictionary Methods
+
+```python
+student = {"name": "Alice", "age": 20}
+
+keys = student.keys()        # Get all keys
+values = student.values()    # Get all values
+items = student.items()      # Get key-value pairs
+
+for key, value in student.items():
+    print(f"{key}: {value}")
+```
+
+### Dictionary Comprehensions
+
+```python
+# Create dictionary from list
+numbers = [1, 2, 3, 4]
+squares = {x: x**2 for x in numbers}
+# {1: 1, 2: 4, 3: 9, 4: 16}
+```
+
+## Tuples
+
+Tuples are ordered, immutable collections.
+
+### Creating Tuples
+
+```python
+coordinates = (3, 4)
+point = 1, 2, 3  # Parentheses optional
+single = (5,)    # Single element needs comma
+empty = ()
+```
+
+### Accessing Elements
+
+```python
+point = (1, 2, 3)
+print(point[0])   # 1
+print(point[-1]) # 3
+x, y, z = point   # Unpacking
+```
+
+### Why Use Tuples?
+
+- **Immutable**: Can't be changed (safer)
+- **Faster**: More efficient than lists
+- **Hashable**: Can be used as dictionary keys
+
+```python
+# Valid dictionary key
+locations = {
+    (0, 0): "Origin",
+    (1, 2): "Point A"
+}
+```
+
+## Sets
+
+Sets are unordered collections of unique elements.
+
+### Creating Sets
+
+```python
+fruits = {"apple", "banana", "cherry"}
+numbers = {1, 2, 3, 4, 5}
+empty = set()  # Note: {} creates empty dict, not set
+```
+
+### Set Operations
+
+```python
+set1 = {1, 2, 3, 4}
+set2 = {3, 4, 5, 6}
+
+# Union
+union = set1 | set2  # {1, 2, 3, 4, 5, 6}
+
+# Intersection
+intersection = set1 & set2  # {3, 4}
+
+# Difference
+difference = set1 - set2  # {1, 2}
+
+# Symmetric difference
+sym_diff = set1 ^ set2  # {1, 2, 5, 6}
+```
+
+### Set Methods
+
+```python
+numbers = {1, 2, 3}
+
+numbers.add(4)           # Add element
+numbers.remove(2)        # Remove (error if not exists)
+numbers.discard(5)       # Remove (no error if not exists)
+numbers.pop()            # Remove and return arbitrary element
+numbers.clear()          # Remove all elements
+```
+
+## Choosing the Right Data Structure
+
+| Structure | Ordered | Mutable | Use Case |
+|-----------|---------|---------|----------|
+| List | Yes | Yes | Ordered collection, duplicates allowed |
+| Tuple | Yes | No | Fixed collection, coordinates, records |
+| Set | No | Yes | Unique elements, membership testing |
+| Dictionary | Yes* | Yes | Key-value pairs, lookups |
+
+*Python 3.7+ maintains insertion order
+
+## Practice Examples
+
+### Example 1: Student Grades
+
+```python
+students = {
+    "Alice": [85, 90, 88],
+    "Bob": [78, 82, 80],
+    "Charlie": [92, 95, 90]
+}
+
+# Calculate average for each student
+for name, grades in students.items():
+    average = sum(grades) / len(grades)
+    print(f"{name}: {average:.2f}")
+```
+
+### Example 2: Remove Duplicates
+
+```python
+numbers = [1, 2, 2, 3, 3, 3, 4, 5]
+unique = list(set(numbers))  # [1, 2, 3, 4, 5]
+```
+
+### Example 3: Word Frequency
+
+```python
+text = "hello world hello python world"
+words = text.split()
+
+frequency = {}
+for word in words:
+    frequency[word] = frequency.get(word, 0) + 1
+
+print(frequency)  # {'hello': 2, 'world': 2, 'python': 1}
+```
+
+## Next Chapter
+
+Now that you understand data structures, let's learn Object-Oriented Programming - creating your own custom types with classes!
+

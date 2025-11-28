@@ -1,0 +1,99 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+// Get all courses (from **/index.mdx pattern)
+const allCourses = await getCollection("courses");
+const courses = allCourses.sort(
+	(a, b) => (a.data.order || 999) - (b.data.order || 999),
+);
+
+// Get all chapters to count per course
+const allChapters = await getCollection("chapters");
+
+// Group chapters by course
+const chapterCountByCourse: Record<string, number> = {};
+for (const chapter of allChapters) {
+	const courseSlug = chapter.data.course;
+	chapterCountByCourse[courseSlug] =
+		(chapterCountByCourse[courseSlug] || 0) + 1;
+}
+---
+
+<Layout>
+	<section class="pt-24 pb-16 flex-1 max-w-7xl mx-auto px-4 w-full">
+		<div class="max-w-4xl mx-auto text-center mb-12">
+			<h1
+				class="text-4xl sm:text-5xl font-extrabold text-blue-800 drop-shadow mb-4"
+			>
+				All Courses
+			</h1>
+			<p class="text-gray-600 mx-auto max-w-2xl text-lg">
+				Explore our collection of courses designed to help you learn and
+				grow.
+			</p>
+		</div>
+
+		<div
+			class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+		>
+			{
+				courses.map((course) => {
+					const chapterCount = chapterCountByCourse[course.id] || 0;
+					return (
+						<a
+							href={`/courses/${course.id}`}
+							class="group relative overflow-hidden rounded-xl bg-white border border-gray-200 shadow-sm hover:shadow-xl hover:border-blue-400 transition-all duration-300"
+						>
+							{course.data.image && (
+								<div class="aspect-video overflow-hidden">
+									<img
+										src={course.data.image}
+										alt={course.data.title}
+										class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+									/>
+								</div>
+							)}
+							<div class="p-6">
+								<div class="flex items-start justify-between mb-3">
+									<h2 class="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
+										{course.data.title}
+									</h2>
+									{chapterCount > 0 && (
+										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+											{chapterCount}{" "}
+											{chapterCount === 1
+												? "chapter"
+												: "chapters"}
+										</span>
+									)}
+								</div>
+								{course.data.description && (
+									<p class="text-gray-600 text-sm line-clamp-2">
+										{course.data.description}
+									</p>
+								)}
+								<div class="mt-4 flex items-center text-blue-600 text-sm font-medium">
+									<span>Start Learning</span>
+									<svg
+										class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M9 5l7 7-7 7"
+										/>
+									</svg>
+								</div>
+							</div>
+						</a>
+					);
+				})
+			}
+		</div>
+	</section>
+</Layout>

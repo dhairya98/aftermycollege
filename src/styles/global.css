@@ -12,3 +12,7 @@ mjx-container[display="true"] {
 mjx-math {
 	line-height: normal !important;
 }
+
+html {
+	scroll-behavior: smooth;
+}

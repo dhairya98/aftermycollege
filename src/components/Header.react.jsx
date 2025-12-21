@@ -111,14 +111,14 @@ export default function Header({ siteTitle = "", menuItems = [] }) {
 					</a>
 
 					{/* Right: Actions */}
-					<div className="flex items-center space-x-4">
+					{/* <div className="flex items-center space-x-4">
 						<a href="#" className="text-sm">
 							Log in
 						</a>
 						<a href="#" className="px-3 py-2 rounded-md text-sm">
 							Sign up
 						</a>
-					</div>
+					</div> */}
 				</div>
 			</div>
 		</header>

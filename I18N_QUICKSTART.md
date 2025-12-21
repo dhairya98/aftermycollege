@@ -3,6 +3,7 @@
 ## Minimal Setup (Get Started in 30 minutes)
 
 ### 1. Install Dependencies
+
 ```bash
 npm install astro-i18next i18next react-i18next
 ```
@@ -10,36 +11,39 @@ npm install astro-i18next i18next react-i18next
 ### 2. Create Translation Files
 
 **src/locales/en/common.json**
+
 ```json
 {
-  "nav": {
-    "explore": "Explore",
-    "login": "Log in",
-    "signup": "Sign up"
-  },
-  "home": {
-    "title": "Learn anything. Build everything.",
-    "exploreCourses": "Explore courses"
-  }
+	"nav": {
+		"explore": "Explore"
+		// "login": "Log in",
+		// "signup": "Sign up"
+	},
+	"home": {
+		"title": "Learn anything. Build everything.",
+		"exploreCourses": "Explore courses"
+	}
 }
 ```
 
 **src/locales/es/common.json**
+
 ```json
 {
-  "nav": {
-    "explore": "Explorar",
-    "login": "Iniciar sesión",
-    "signup": "Registrarse"
-  },
-  "home": {
-    "title": "Aprende cualquier cosa. Construye todo.",
-    "exploreCourses": "Explorar cursos"
-  }
+	"nav": {
+		"explore": "Explorar",
+		"login": "Iniciar sesión",
+		"signup": "Registrarse"
+	},
+	"home": {
+		"title": "Aprende cualquier cosa. Construye todo.",
+		"exploreCourses": "Explorar cursos"
+	}
 }
 ```
 
 ### 3. Update astro.config.mjs
+
 ```javascript
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
@@ -49,46 +53,45 @@ import remarkMath from "remark-math";
 import rehypeMathjax from "rehype-mathjax";
 
 export default defineConfig({
-  i18n: {
-    defaultLocale: "en",
-    locales: ["en", "es"],
-    routing: {
-      prefixDefaultLocale: false, // /courses instead of /en/courses
-    }
-  },
-  integrations: [
-    react(),
-    tailwind(),
-    mdx({
-      remarkPlugins: [remarkMath],
-      rehypePlugins: [rehypeMathjax],
-    }),
-  ],
+	i18n: {
+		defaultLocale: "en",
+		locales: ["en", "es"],
+		routing: {
+			prefixDefaultLocale: false, // /courses instead of /en/courses
+		},
+	},
+	integrations: [
+		react(),
+		tailwind(),
+		mdx({
+			remarkPlugins: [remarkMath],
+			rehypePlugins: [rehypeMathjax],
+		}),
+	],
 });
 ```
 
 ### 4. Create i18n Utility
 
 **src/utils/i18n.ts**
-```typescript
-import i18next from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import en from '../locales/en/common.json';
-import es from '../locales/es/common.json';
 
-i18next
-  .use(initReactI18next)
-  .init({
-    resources: {
-      en: { translation: en },
-      es: { translation: es },
-    },
-    lng: 'en',
-    fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+```typescript
+import i18next from "i18next";
+import { initReactI18next } from "react-i18next";
+import en from "../locales/en/common.json";
+import es from "../locales/es/common.json";
+
+i18next.use(initReactI18next).init({
+	resources: {
+		en: { translation: en },
+		es: { translation: es },
+	},
+	lng: "en",
+	fallbackLng: "en",
+	interpolation: {
+		escapeValue: false,
+	},
+});
 
 export default i18next;
 ```
@@ -96,38 +99,41 @@ export default i18next;
 ### 5. Update Header Component
 
 **src/components/Header.react.jsx**
+
 ```jsx
-import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
+import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 export default function Header({ siteTitle = "", menuItems = [] }) {
-  const { t, i18n } = useTranslation();
-  
-  // Initialize i18n on mount
-  useEffect(() => {
-    // Detect language from URL or browser
-    const lang = window.location.pathname.split('/')[1] || 
-                 navigator.language.split('-')[0] || 
-                 'en';
-    if (['en', 'es'].includes(lang)) {
-      i18n.changeLanguage(lang);
-    }
-  }, [i18n]);
-  
-  // ... rest of component
-  return (
-    <header>
-      <button>{t('nav.explore')}</button>
-      <a href="#">{t('nav.login')}</a>
-      <a href="#">{t('nav.signup')}</a>
-    </header>
-  );
+	const { t, i18n } = useTranslation();
+
+	// Initialize i18n on mount
+	useEffect(() => {
+		// Detect language from URL or browser
+		const lang =
+			window.location.pathname.split("/")[1] ||
+			navigator.language.split("-")[0] ||
+			"en";
+		if (["en", "es"].includes(lang)) {
+			i18n.changeLanguage(lang);
+		}
+	}, [i18n]);
+
+	// ... rest of component
+	return (
+		<header>
+			<button>{t("nav.explore")}</button>
+			<a href="#">{t("nav.login")}</a>
+			<a href="#">{t("nav.signup")}</a>
+		</header>
+	);
 }
 ```
 
 ### 6. Update Navbar to Pass Language
 
 **src/components/Navbar.astro**
+
 ```astro
 ---
 import Header from "../components/Header.react.jsx";
@@ -153,43 +159,45 @@ const siteTitle = "After My College";
 ### 7. Create Language Switcher
 
 **src/components/LanguageSwitcher.tsx**
+
 ```tsx
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 export default function LanguageSwitcher() {
-  const { i18n } = useTranslation();
-  
-  const languages = [
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'es', name: 'Español', flag: '🇪🇸' },
-  ];
-  
-  const switchLanguage = (lang: string) => {
-    i18n.changeLanguage(lang);
-    const currentPath = window.location.pathname;
-    const newPath = currentPath.replace(/^\/(en|es)/, `/${lang}`);
-    window.location.href = newPath || `/${lang}`;
-  };
-  
-  return (
-    <select 
-      value={i18n.language} 
-      onChange={(e) => switchLanguage(e.target.value)}
-      className="px-3 py-1 rounded border"
-    >
-      {languages.map(lang => (
-        <option key={lang.code} value={lang.code}>
-          {lang.flag} {lang.name}
-        </option>
-      ))}
-    </select>
-  );
+	const { i18n } = useTranslation();
+
+	const languages = [
+		{ code: "en", name: "English", flag: "🇺🇸" },
+		{ code: "es", name: "Español", flag: "🇪🇸" },
+	];
+
+	const switchLanguage = (lang: string) => {
+		i18n.changeLanguage(lang);
+		const currentPath = window.location.pathname;
+		const newPath = currentPath.replace(/^\/(en|es)/, `/${lang}`);
+		window.location.href = newPath || `/${lang}`;
+	};
+
+	return (
+		<select
+			value={i18n.language}
+			onChange={(e) => switchLanguage(e.target.value)}
+			className="px-3 py-1 rounded border"
+		>
+			{languages.map((lang) => (
+				<option key={lang.code} value={lang.code}>
+					{lang.flag} {lang.name}
+				</option>
+			))}
+		</select>
+	);
 }
 ```
 
 ### 8. Add to Layout
 
 **src/layouts/Layout.astro**
+
 ```astro
 ---
 import "../styles/global.css";
@@ -231,4 +239,3 @@ const lang = Astro.params.lang || 'en';
 2. Add content translation (courses, chapters)
 3. Update all page routes to include `[lang]` parameter
 4. Add SEO metadata per language
-

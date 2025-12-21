@@ -5,20 +5,20 @@ import TableOfContents from "../../../components/TableOfContents";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
-    // Get chapters from the chapters collection (uses **/[!index]*.mdx pattern)
-    const allChapters = await getCollection("chapters");
+	// Get chapters from the chapters collection (uses **/[!index]*.mdx pattern)
+	const allChapters = await getCollection("chapters");
 
-    return allChapters.map((chapter) => {
-        // chapter.id is like "calculus/chapter-1-limits", extract just the filename
-        const chapterSlug = chapter.id.split("/").pop() || chapter.id;
-        return {
-            params: {
-                courseSlug: chapter.data.course,
-                chapterSlug: chapterSlug,
-            },
-            props: { chapter },
-        };
-    });
+	return allChapters.map((chapter) => {
+		// chapter.id is like "calculus/chapter-1-limits", extract just the filename
+		const chapterSlug = chapter.id.split("/").pop() || chapter.id;
+		return {
+			params: {
+				courseSlug: chapter.data.course,
+				chapterSlug: chapterSlug,
+			},
+			props: { chapter },
+		};
+	});
 }
 
 const { chapter } = Astro.props;
@@ -34,186 +34,187 @@ const course = allCourses.find((c) => c.id === courseSlug);
 // Get all chapters for this course (for navigation)
 const allChapters = await getCollection("chapters");
 const courseChapters = allChapters
-    .filter((ch) => ch.data.course === courseSlug)
-    .sort((a, b) => (a.data.chapterOrder || 0) - (b.data.chapterOrder || 0));
+	.filter((ch) => ch.data.course === courseSlug)
+	.sort((a, b) => (a.data.chapterOrder || 0) - (b.data.chapterOrder || 0));
 
 // Helper to get chapter slug from id
 const getChapterSlug = (id: string) => id.split("/").pop() || id;
 
 // Find prev/next chapters
 const currentIndex = courseChapters.findIndex(
-    (ch) => getChapterSlug(ch.id) === chapterSlug,
+	(ch) => getChapterSlug(ch.id) === chapterSlug
 );
 const prevChapter = currentIndex > 0 ? courseChapters[currentIndex - 1] : null;
 const nextChapter =
-    currentIndex < courseChapters.length - 1
-        ? courseChapters[currentIndex + 1]
-        : null;
+	currentIndex < courseChapters.length - 1
+		? courseChapters[currentIndex + 1]
+		: null;
 ---
 
 <Layout>
-    <CourseLayout
-        title={chapter.data.title}
-        description={chapter.data.description}
-        image={chapter.data.image || course?.data.image}
-        courseSlug={courseSlug}
-        showHero={false}
-        showToc={true}
-    >
-        <!-- Table of Contents (Right Sidebar) -->
-        <TableOfContents client:only="react" slot="toc" />
-        <!-- Chapter Header -->
-        <div class="mb-8 pb-6 border-b border-gray-200">
-            <div class="flex items-center gap-3 text-sm text-gray-500 mb-3">
-                <a
-                    href={`/courses/${courseSlug}`}
-                    class="hover:text-blue-600 transition-colors"
-                >
-                    {course?.data.title || courseSlug}
-                </a>
-                <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 5l7 7-7 7"></path>
-                </svg>
-                <span class="text-gray-700"
-                    >Chapter {chapter.data.chapterOrder}</span
-                >
-            </div>
-            <h1 class="text-3xl font-bold text-gray-900">
-                {chapter.data.title}
-            </h1>
-            {
-                chapter.data.description && (
-                    <p class="mt-3 text-lg text-gray-600">
-                        {chapter.data.description}
-                    </p>
-                )
-            }
-        </div>
+	<CourseLayout
+		title={chapter.data.title}
+		description={chapter.data.description}
+		image={chapter.data.image || course?.data.image}
+		courseSlug={courseSlug}
+		showHero={false}
+		showToc={true}
+	>
+		<!-- Table of Contents (Right Sidebar) -->
+		<TableOfContents client:only="react" contentId="content" slot="toc" />
+		<!-- Chapter Header -->
+		<div class="mb-8 pb-6 border-b border-gray-200">
+			<div class="flex items-center gap-3 text-sm text-gray-500 mb-3">
+				<a
+					href={`/courses/${courseSlug}`}
+					class="hover:text-blue-600 transition-colors"
+				>
+					{course?.data.title || courseSlug}
+				</a>
+				<svg
+					class="w-4 h-4"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M9 5l7 7-7 7"></path>
+				</svg>
+				<span class="text-gray-700"
+					>Chapter {chapter.data.chapterOrder}</span
+				>
+			</div>
+			<h1 class="text-3xl font-bold text-gray-900">
+				{chapter.data.title}
+			</h1>
+			{
+				chapter.data.description && (
+					<p class="mt-3 text-lg text-gray-600">
+						{chapter.data.description}
+					</p>
+				)
+			}
+		</div>
 
-        <!-- Chapter Content -->
-        <article
-            class="prose prose-slate max-w-none prose-headings:scroll-mt-20"
-        >
-            <Content />
-        </article>
+		<!-- Chapter Content -->
+		<article
+			id="content"
+			class="prose prose-slate max-w-none prose-headings:scroll-mt-24"
+		>
+			<Content />
+		</article>
 
-        <!-- Navigation -->
-        <nav class="mt-12 pt-8 border-t border-gray-200">
-            <div
-                class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4"
-            >
-                {
-                    prevChapter ? (
-                        <a
-                            href={`/courses/${courseSlug}/${getChapterSlug(prevChapter.id)}`}
-                            class="group flex items-center gap-3 px-5 py-3 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors"
-                        >
-                            <svg
-                                class="w-5 h-5 text-gray-400 group-hover:-translate-x-1 transition-transform"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M15 19l-7-7 7-7"
-                                />
-                            </svg>
-                            <div class="text-left">
-                                <div class="text-xs text-gray-500 uppercase tracking-wide">
-                                    Previous
-                                </div>
-                                <div class="font-medium text-gray-900">
-                                    {prevChapter.data.title}
-                                </div>
-                            </div>
-                        </a>
-                    ) : (
-                        <div class="hidden sm:block" />
-                    )
-                }
+		<!-- Navigation -->
+		<nav class="mt-12 pt-8 border-t border-gray-200">
+			<div
+				class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4"
+			>
+				{
+					prevChapter ? (
+						<a
+							href={`/courses/${courseSlug}/${getChapterSlug(prevChapter.id)}`}
+							class="group flex items-center gap-3 px-5 py-3 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors"
+						>
+							<svg
+								class="w-5 h-5 text-gray-400 group-hover:-translate-x-1 transition-transform"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M15 19l-7-7 7-7"
+								/>
+							</svg>
+							<div class="text-left">
+								<div class="text-xs text-gray-500 uppercase tracking-wide">
+									Previous
+								</div>
+								<div class="font-medium text-gray-900">
+									{prevChapter.data.title}
+								</div>
+							</div>
+						</a>
+					) : (
+						<div class="hidden sm:block" />
+					)
+				}
 
-                <a
-                    href={`/courses/${courseSlug}`}
-                    class="hidden sm:flex items-center gap-2 px-4 py-2 text-blue-600 hover:text-blue-700 font-medium transition-colors"
-                >
-                    <svg
-                        class="w-4 h-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
-                    </svg>
-                    All Chapters
-                </a>
+				<a
+					href={`/courses/${courseSlug}`}
+					class="hidden sm:flex items-center gap-2 px-4 py-2 text-blue-600 hover:text-blue-700 font-medium transition-colors"
+				>
+					<svg
+						class="w-4 h-4"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+					</svg>
+					All Chapters
+				</a>
 
-                {
-                    nextChapter ? (
-                        <a
-                            href={`/courses/${courseSlug}/${getChapterSlug(nextChapter.id)}`}
-                            class="group flex items-center justify-end gap-3 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors"
-                        >
-                            <div class="text-right">
-                                <div class="text-xs text-blue-200 uppercase tracking-wide">
-                                    Next
-                                </div>
-                                <div class="font-medium">
-                                    {nextChapter.data.title}
-                                </div>
-                            </div>
-                            <svg
-                                class="w-5 h-5 text-blue-200 group-hover:translate-x-1 transition-transform"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 5l7 7-7 7"
-                                />
-                            </svg>
-                        </a>
-                    ) : (
-                        <a
-                            href={`/courses/${courseSlug}`}
-                            class="flex items-center justify-center gap-2 px-5 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl transition-colors"
-                        >
-                            <svg
-                                class="w-5 h-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M5 13l4 4L19 7"
-                                />
-                            </svg>
-                            Course Complete!
-                        </a>
-                    )
-                }
-            </div>
-        </nav>
-    </CourseLayout>
+				{
+					nextChapter ? (
+						<a
+							href={`/courses/${courseSlug}/${getChapterSlug(nextChapter.id)}`}
+							class="group flex items-center justify-end gap-3 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors"
+						>
+							<div class="text-right">
+								<div class="text-xs text-blue-200 uppercase tracking-wide">
+									Next
+								</div>
+								<div class="font-medium">
+									{nextChapter.data.title}
+								</div>
+							</div>
+							<svg
+								class="w-5 h-5 text-blue-200 group-hover:translate-x-1 transition-transform"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M9 5l7 7-7 7"
+								/>
+							</svg>
+						</a>
+					) : (
+						<a
+							href={`/courses/${courseSlug}`}
+							class="flex items-center justify-center gap-2 px-5 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl transition-colors"
+						>
+							<svg
+								class="w-5 h-5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M5 13l4 4L19 7"
+								/>
+							</svg>
+							Course Complete!
+						</a>
+					)
+				}
+			</div>
+		</nav>
+	</CourseLayout>
 </Layout>

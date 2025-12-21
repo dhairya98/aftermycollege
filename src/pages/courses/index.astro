@@ -5,7 +5,7 @@ import { getCollection } from "astro:content";
 // Get all courses (from **/index.mdx pattern)
 const allCourses = await getCollection("courses");
 const courses = allCourses.sort(
-	(a, b) => (a.data.order || 999) - (b.data.order || 999),
+	(a, b) => (a.data.order || 999) - (b.data.order || 999)
 );
 
 // Get all chapters to count per course
